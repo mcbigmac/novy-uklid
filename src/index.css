@@ -1,13 +1,202 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding:0;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+
+h1 {
+  color: indigo;
+  margin: 50px;
+  margin-top: 0;
+  padding-top: 50px;
+  text-decoration: underline;
+}
+
+.main {
+  display:flex;
+  margin: 50px;
+  margin-bottom: 0;
+}
+
+@media(max-width: 1030px){
+  .main {
+    display: block;
+    margin: 20px;
+  }
+
+  h1 {margin: 20px 20px 50px 20px};
+}
+
+.buttons {
+  display: flex;
+  width: 100vw; align-items: center;
+  justify-content: left;
+  margin: 50px;
+}
+
+.prepinac {
+  font-size: 20px;
+  margin: 20px;
+  padding: 15px;
+  border: 2px solid rgb(126, 197, 194);
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+
+
+.prepinac:hover {
+ border: 2px solid black;
+}
+
+table {
+  border: 1px solid black;
+  border-collapse: collapse;
+  margin: 30px 50px 50px 0;
+  background-color: white;
+ 
+}
+
+.cancel {
+  width: 20px;
+  text-align: center;
+}
+
+.todoName {
+  width: 200px;
+}
+
+.todoTime {
+  width: 50px;
+}
+
+.todoWho {
+  width: 100px;
+}
+
+.todoFinished {
+  width: 80px;
+}
+
+td, th {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+@media(max-width: 600px) {
+  table {
+    width: 90vw;
+   font-size: 11px;
+  }
+
+  .cancel {
+    width: 10px;
+    text-align: center;
+    
+  }
+  
+  .todoName {
+    width: 100px;
+  }
+  
+  .todoTime {
+    width: 25px;
+  }
+  
+  .todoWho {
+    width: 50px;
+  }
+  
+  .todoFinished {
+    width: 40px;
+  }
+
+  td, th {
+    border: 1px solid black;
+    padding: 10px 5px;
+  }
+  
+}
+
+
+
+
+thead {
+  background-color: lavender;
+  font-weight: bold;
+}
+
+.kdoKolik {
+  border: 1px solid black;
+  width: 100%;
+  
+}
+
+#individuals {
+  margin-left: 50px;
+}
+
+@media (max-width:1030px) {
+  .kdoKolik {
+    width: 50%;
+  }
+  #individuals {
+    margin-left:0;
+  }
+}
+
+.kdoJmeno {
+  width: 30%;
+}
+
+.radioContainer {
+  font-size: 13px;
+}
+
+
+
+@media(max-width:600px){
+  #individuals {
+  margin: 0;
+  }
+  
+  #individuals table {
+    margin-right: 0;
+   
+  }
+}
+
+.oznameni {
+  color: red;
+}
+
+.person {
+  margin-bottom: 50px;
+}
+
+h3 {
+ text-decoration: underline;
+ font-weight: bold;
+ margin-bottom: 30px;
+}
+
+.celkovyCas {
+  text-decoration: none;
+  color: indigo;
+  margin-bottom: 10px;
+}
+
+.dilciCas {
+  margin:0;
+  padding: 0;
 }
