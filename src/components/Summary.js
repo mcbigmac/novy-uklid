@@ -1,19 +1,27 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import KdoKolik from "./KdoKolik";
 import OsobaCas from "./OsobaCas";
+import styled from "styled-components";
+import { countHours, timeCount } from "../utils";
 
-function Summary(props) {
-  let countTime = props.countTime;
+const MalyNadpis = styled.h3`
+  text-decoration: underline;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: ${(props) => props.theme.color};
+`;
 
-  function countHours(minutes) {
-    return Math.floor(minutes / 60) + " h " + (minutes % 60) + " min";
-  }
+function Summary() {
+  console.log("rendering");
+  const week = useSelector((state) => state.meta.week);
+  const todos = useSelector((state) => (week ? state.week : state.season));
 
   const [percentTime, setPercentTime] = useState({
-    mama: { name: "Máma", percent: 25, time: (countTime / 100) * 25 },
-    tata: { name: "Táta", percent: 25, time: (countTime / 100) * 25 },
-    kuba: { name: "Kuba", percent: 25, time: (countTime / 100) * 25 },
-    matej: { name: "Matěj", percent: 25, time: (countTime / 100) * 25 },
+    mama: { name: "Máma", percent: 25, time: (timeCount(todos) / 100) * 25 },
+    tata: { name: "Táta", percent: 25, time: (timeCount(todos) / 100) * 25 },
+    kuba: { name: "Kuba", percent: 25, time: (timeCount(todos) / 100) * 25 },
+    matej: { name: "Matěj", percent: 25, time: (timeCount(todos) / 100) * 25 },
   });
 
   let sumPercent =
@@ -41,7 +49,11 @@ function Summary(props) {
   ));
 
   let minTable = Object.entries(percentTime).map((person) => (
-    <OsobaCas key={person[1].name} person={person[1]} countTime={countTime} />
+    <OsobaCas
+      key={person[1].name}
+      person={person[1]}
+      countTime={timeCount(todos)}
+    />
   ));
 
   function changeTimePerson(person, e) {
@@ -52,7 +64,7 @@ function Summary(props) {
           [property]: {
             ...percentTime[property],
             percent: Number(e.target.value),
-            time: (countTime / 100) * Number(e.target.value),
+            time: (timeCount(todos) / 100) * Number(e.target.value),
           },
         });
       }
@@ -61,19 +73,18 @@ function Summary(props) {
 
   return (
     <div>
-      <h3>
-        {" "}
-        Čas {props.zobrazTyden ? "týdenního" : "jarního"} úklidu celkem:{" "}
-        {countHours(countTime)}{" "}
-      </h3>
-      <h3>Jakou část kdo udělá:</h3>
+      <MalyNadpis>
+        Čas {week ? "týdenního" : "jarního"} úklidu celkem:{" "}
+        {countHours(timeCount(todos))}
+      </MalyNadpis>
+      <MalyNadpis>Jakou část kdo udělá:</MalyNadpis>
       <table className="kdoKolik">
         <tbody>{timeTable}</tbody>
       </table>
       <div>{ukazOznameni(sumPercent)}</div>
 
       <div>
-        <h3>Čas na osobu:</h3>
+        <MalyNadpis>Čas na osobu:</MalyNadpis>
         <table className="kdoKolik">
           <tbody>{minTable}</tbody>
         </table>

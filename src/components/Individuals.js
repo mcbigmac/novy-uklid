@@ -1,42 +1,14 @@
 import React from "react";
 import Person from "./Person";
 
-function Individuals(props) {
-  let todos = props.todos;
+function Individuals() {
+  const people = ["Máma", "Táta", "Kuba", "Matěj"];
 
-   
-  return (
-    <div id="individuals">
-      <Person
-        name="Máma"
-        todos={todos.mama}
-        completed={props.completed}
-        zobrazTyden={props.zobrazTyden}
-        prepisDoTydennich = {props.prepisDoTydennich}
-      />
-      <Person
-        name="Táta"
-        todos={todos.tata}
-        completed={props.completed}
-        zobrazTyden={props.zobrazTyden}
-        prepisDoTydennich = {props.prepisDoTydennich}
-      />
-      <Person
-        name="Kuba"
-        todos={todos.kuba}
-        completed={props.completed}
-        zobrazTyden={props.zobrazTyden}
-        prepisDoTydennich = {props.prepisDoTydennich}
-      />
-      <Person
-        name="Matěj"
-        todos={todos.matej}
-        completed={props.completed}
-        zobrazTyden={props.zobrazTyden}
-        prepisDoTydennich = {props.prepisDoTydennich}
-      />
-    </div>
-  );
+  const peopleComponents = people.map((person) => (
+    <Person name={person} key={person} />
+  ));
+
+  return <div id="individuals">{peopleComponents}</div>;
 }
 
 export default Individuals;

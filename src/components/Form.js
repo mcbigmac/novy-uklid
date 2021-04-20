@@ -1,16 +1,20 @@
 import React from "react";
 import FormCell from "./FormCell";
+import { useSelector } from "react-redux";
 
-function Form(props) {
-  
-  let activityList = props.todos.map((todo) => (
-    <FormCell
-      key={todo.name}
-      todo={todo}
-      deleteTodo={(e) => props.deleteTodo(todo.name, e)}
-      radioClick = {(e)=>props.radioClick(todo, e.target.value, e)}
-      
-    />
+function Form() {
+  const people = ["Máma", "Táta", "Kuba", "Matěj"];
+  const week = useSelector((state) => state.meta.week);
+  const todos = useSelector((state) => (week ? state.week : state.season));
+
+  const peopleList = people.map((person) => (
+    <th className="radioContainer" key={person}>
+      {person}
+    </th>
+  ));
+
+  let activityList = todos.map((todo) => (
+    <FormCell key={todo.name} todo={todo} people={people} />
   ));
 
   return (
@@ -25,23 +29,18 @@ function Form(props) {
             <th className="todoTime" rowSpan="2">
               Čas
             </th>
-            <th className="todoWho" colSpan="4">Kdo to udělá</th>
+            <th className="todoWho" colSpan="4">
+              Kdo to udělá
+            </th>
             <th className="todoFinished" rowSpan="2">
               Splněno
             </th>
           </tr>
-          <tr>
-            <th className="radioContainer">Máma</th>
-            <th className="radioContainer">Táta</th>
-            <th className="radioContainer">Kuba</th>
-            <th className="radioContainer">Matěj</th>
-          </tr>
+          <tr>{peopleList}</tr>
         </thead>
         <tbody>{activityList}</tbody>
       </table>
-      <div id='tableBottom'>
-        
-      </div>
+      <div id="tableBottom"></div>
     </div>
   );
 }

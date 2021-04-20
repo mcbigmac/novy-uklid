@@ -1,75 +1,66 @@
 import TydenNeboPololeti from "./components/TydenNeboPololeti";
-import cinnostiTyden from "./cinnostiTyden";
 import cinnostiPololeti from "./cinnostiPololeti";
 import { useState, useEffect } from "react";
+import styled, { ThemeProvider } from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+
+const Buttons = styled.div`
+  display: flex;
+  width: 100vw;
+  align-items: center;
+  justify-content: left;
+  margin: 50px;
+`;
+
+const Prepinac = styled.button`
+  font-size: 20px;
+  margin: 20px;
+  padding: 15px;
+  border: 2px solid rgb(126, 197, 194);
+  border-radius: 5px;
+  text-transform: uppercase;
+  background: ${(props) => (props.theme.week ? "rgb(126, 197, 194)" : "white")};
+  &:hover {
+    border: 2px solid black;
+  }
+`;
+
+const PrepinacPololeti = styled(Prepinac)`
+  background: ${(props) => (props.theme.week ? "white" : "rgb(126, 197, 194)")};
+`;
+
+const Nadpis = styled.h1`
+  color: ${(props) => props.theme.color};
+  margin: 50px;
+  margin-top: 0;
+  padding-top: 50px;
+  text-decoration: underline;
+`;
 
 function App() {
-  const [zobrazTyden, setZobrazTyden] = useState(true);
   const [background, setBackground] = useState({ backgroundColor: "white" });
-
-  function predemVybrane(who) {
-    let predemVybrane = cinnostiPololeti.filter((todo) => todo.who === who);
-    let osobniObjekt = {};
-    if (predemVybrane.length) {
-      for (let item of predemVybrane) {
-        osobniObjekt[item.name] = item;
-      }
-    }
-    return osobniObjekt;
-  }
-
-  let predemVybraneMama = predemVybrane("mama");
-  let predemVybraneTata = predemVybrane("tata");
-  let predemVybraneKuba = predemVybrane("kuba");
-  let predemVybraneMatej = predemVybrane("matej");
-
-  const predemVybraneObjekt = {
-    mama: predemVybraneMama,
-    tata: predemVybraneTata,
-    kuba: predemVybraneKuba,
-    matej: predemVybraneMatej,
-  };
-
-  useEffect(() => {
-    if (!zobrazTyden) {
-      setBackground({ backgroundColor: "#e6f6e6" });
-    } else if (zobrazTyden) {
-      setBackground({ backgroundColor: "white" });
-    }
-  }, [zobrazTyden]);
+  const dispatch = useDispatch();
+  const week = useSelector((state) => state.meta.week);
 
   return (
-    <div style={background}>
-      <h1>Rodinný úklid aneb Kdo uteče, vyhraje</h1>
-      <div className="buttons">
-        <button
-          className="prepinac"
-          style={{
-            backgroundColor: zobrazTyden
-              ? "rgb(126, 197, 194)"
-              : "white"
-          }}
-          onClick={() => setZobrazTyden(true)}
-        >
-          Týdenní úklid
-        </button>
-        <button
-          className="prepinac"
-          style={{
-            backgroundColor: zobrazTyden
-              ? "white"
-              : "rgb(126, 197, 194)",
-          }}
-          onClick={() => setZobrazTyden(false)}
-        >
-          Jarní úklid
-        </button>
-      </div>
-      <TydenNeboPololeti
-        zobrazTyden={zobrazTyden}
-        cinnosti={zobrazTyden ? cinnostiTyden : cinnostiPololeti}
-        predemVybrane={predemVybraneObjekt}
-      />
+    <div style={background} data-testid="background">
+      <ThemeProvider
+        theme={{
+          color: "indigo",
+          week,
+        }}
+      >
+        <Nadpis>Rodinný úklid aneb Kdo uteče, vyhraje</Nadpis>
+        <Buttons>
+          <Prepinac onClick={() => dispatch({ type: "SWITCH" })}>
+            Týdenní úklid
+          </Prepinac>
+          <PrepinacPololeti onClick={() => dispatch({ type: "SWITCH" })}>
+            Jarní úklid
+          </PrepinacPololeti>
+        </Buttons>
+        <TydenNeboPololeti />
+      </ThemeProvider>
     </div>
   );
 }

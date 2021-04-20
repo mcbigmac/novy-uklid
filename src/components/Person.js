@@ -1,153 +1,110 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { countHours, timeCount, countHoursStatement } from "../utils";
 
 function Person(props) {
-  let activities;
-  let time = 0;
-  let tydenTime = 0;
-  let pololetiTime = 0;
-  let activityList;
-  let color = {};
-  let background = {};
   const [necoSeUdelalo, setNecoSeUdelalo] = useState(false);
 
-  if (props.name === "Máma") {
-    color = { color: "hotpink" };
-    background = { backgroundColor: "pink" };
-  } else if (props.name === "Táta") {
-    color = { color: "blue" };
-    background = { backgroundColor: "lightblue" };
-  } else if (props.name === "Kuba") {
-    color = { color: "green" };
-    background = { backgroundColor: "lightgreen" };
-  } else {
-    color = { color: "chocolate" };
-    background = { backgroundColor: "burlywood" };
+  const seasonTodoToday = useSelector((state) =>
+    state.season.filter((todo) => todo.tyden)
+  );
+
+  const week = useSelector((state) => state.meta.week);
+
+  const cinnostiTyden = useSelector((state) => state.week);
+  const cinnostiPololeti = useSelector((state) => state.season);
+
+  const cinnosti = (week
+    ? [...cinnostiTyden, ...seasonTodoToday]
+    : cinnostiPololeti.filter((todo) => !todo.tyden)
+  ).filter((todo) => todo.who === props.name);
+
+  const theme = useSelector((state) => state.theme);
+  const dispatch = useDispatch();
+
+  function findTheme(name, themeObj) {
+    for (let key in themeObj) {
+      if (themeObj[key].name === name) {
+        return themeObj[key];
+      }
+    }
   }
 
-  if (props.todos) {
-    activities = Object.entries(props.todos).filter((todo) => {
-     
-      return (
-        !todo[1].completed &&
-        ((todo[1].tyden && props.zobrazTyden) ||
-          (!todo[1].tyden && !props.zobrazTyden))
-      );
-    });
-
-    time = activities.reduce((total, current) => total + current[1].time, 0);
-    tydenTime = activities
-      .filter(
-        (activity) => activity[1].tyden && !activity[1].prepsanaDoTydennich
-      )
-      .reduce((total, current) => total + current[1].time, 0);
-
-    pololetiTime = activities
-      .filter(
-        (activity) => activity[1].tyden && activity[1].prepsanaDoTydennich
-      )
-      .reduce((total, current) => total + current[1].time, 0);
-
-    activityList = activities.map((todo) => (
-      <tr key={todo[0]}>
-        <td>{todo[1].name}</td>
-        <td>{todo[1].time} min</td>
-
-        {props.zobrazTyden ? (
+  const activityList = cinnosti
+    .filter((todo) => !todo.completed)
+    .map((todo) => (
+      <tr key={todo.name}>
+        <td>{todo.name}</td>
+        <td>{todo.time} min</td>
+        {week ? (
           <td>
             <input
+              checked={todo.completed}
+              onChange={() => {
+                dispatch({ type: "COMPLETE", payload: todo.name });
+                setNecoSeUdelalo(true);
+              }}
               type="checkbox"
-              onChange={() => completeTask(todo)}
             ></input>
           </td>
         ) : (
           <td>
             <input
+              checked={todo.tyden}
+              onChange={() => {
+                dispatch({ type: "DO_TODAY", payload: todo.name });
+              }}
               type="checkbox"
-              onChange={() => {props.prepisDoTydennich(todo[1]);todo[1].tyden=true}}
             ></input>
           </td>
         )}
       </tr>
     ));
-  }
-
-  function countHours(minutes, statementTotal, statementRest, everythingDone) {
-    if (minutes) {
-      if (Math.floor(minutes / 60) === 0 && !necoSeUdelalo) {
-        return statementTotal + (minutes % 60) + " min";
-      } else if (Math.floor(minutes / 60) === 0 && necoSeUdelalo) {
-        return statementRest + (minutes % 60) + " min";
-      } else if (Math.floor(minutes / 60) > 0 && !necoSeUdelalo) {
-        return (
-          statementTotal +
-          Math.floor(minutes / 60) +
-          " h " +
-          (minutes % 60) +
-          " min"
-        );
-      } else if (Math.floor(minutes / 60) > 0 && necoSeUdelalo) {
-        return (
-          statementRest +
-          Math.floor(minutes / 60) +
-          " h " +
-          (minutes % 60) +
-          " min"
-        );
-      }
-    } else {
-      if (necoSeUdelalo && props.zobrazTyden) {
-        return everythingDone;
-      }
-      else {
-        return null;
-      }
-    }
-  }
-
-  function completeTask(todo) {
-    setNecoSeUdelalo(true);
-    todo[1].completed = true;
-    props.completed(todo[0]);
-  }
 
   return (
     <div className="person">
-      <h3 style={color}>{props.name}</h3>
+      <h3 style={{ color: findTheme(props.name, theme).color }}>
+        {props.name}
+      </h3>
       <h3 className="celkovyCas">
-        {countHours(
-          time,
+        {countHoursStatement(
+          // timeTotal,
           "Celková doba tvého úklidu: ",
           "Celkem ti zbývá: ",
-          "Vše je hotovo, dobrá práce!!!"
+          "Vše je hotovo, dobrá práce!!!",
+          necoSeUdelalo,
+          week
         )}
       </h3>
 
-      {props.zobrazTyden ? (
+      {week ? (
         <div>
           <h4 className="dilciCas">
-            {countHours(
-              tydenTime,
+            {/* {countHoursStatement(
+              timeCount(todos?.filter((todo) => !todo.doToday)),
               "Týdenní úklid: ",
               "Z týdenního úklidu zbývá: ",
-              "Týdenní úklid je hotový."
-            )}
+              "Týdenní úklid je hotový.",
+              necoSeUdelalo
+            )} */}
           </h4>
           <h4 className="dilciCas">
-            {countHours(
-              pololetiTime,
+            {/* {countHoursStatement(
+              // timeCount(todos?.filter((todo) => todo.doToday)),
               "Jarní úklid: ",
               "Z jarního úklidu dnes zbývá: ",
-              "Jarní úklid je dnes hotový."
-            )}
+              "Jarní úklid je dnes hotový.",
+              necoSeUdelalo
+            )} */}
           </h4>
         </div>
       ) : null}
       <table>
         <thead>
-          <tr style={background}>
+          <tr style={{ background: findTheme(props.name, theme).background }}>
             <th>Činnost</th>
             <th>Čas</th>
-            {props.zobrazTyden ? <th>Splněno</th> : <th>Udělat dnes?</th>}
+            {week ? <th>Splněno</th> : <th>Udělat dnes?</th>}
           </tr>
         </thead>
         <tbody>{activityList}</tbody>
