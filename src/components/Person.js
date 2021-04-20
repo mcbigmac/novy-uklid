@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { countHours, timeCount, countHoursStatement } from "../utils";
+import { timeCount, countHoursStatement } from "../utils";
 
 function Person(props) {
   const [necoSeUdelalo, setNecoSeUdelalo] = useState(false);
@@ -17,7 +17,7 @@ function Person(props) {
   const cinnosti = (week
     ? [...cinnostiTyden, ...seasonTodoToday]
     : cinnostiPololeti.filter((todo) => !todo.tyden)
-  ).filter((todo) => todo.who === props.name);
+  ).filter((todo) => todo.who === props.name && !todo.completed);
 
   const theme = useSelector((state) => state.theme);
   const dispatch = useDispatch();
@@ -30,36 +30,34 @@ function Person(props) {
     }
   }
 
-  const activityList = cinnosti
-    .filter((todo) => !todo.completed)
-    .map((todo) => (
-      <tr key={todo.name}>
-        <td>{todo.name}</td>
-        <td>{todo.time} min</td>
-        {week ? (
-          <td>
-            <input
-              checked={todo.completed}
-              onChange={() => {
-                dispatch({ type: "COMPLETE", payload: todo.name });
-                setNecoSeUdelalo(true);
-              }}
-              type="checkbox"
-            ></input>
-          </td>
-        ) : (
-          <td>
-            <input
-              checked={todo.tyden}
-              onChange={() => {
-                dispatch({ type: "DO_TODAY", payload: todo.name });
-              }}
-              type="checkbox"
-            ></input>
-          </td>
-        )}
-      </tr>
-    ));
+  const activityList = cinnosti.map((todo) => (
+    <tr key={todo.name}>
+      <td>{todo.name}</td>
+      <td>{todo.time} min</td>
+      {week ? (
+        <td>
+          <input
+            checked={todo.completed}
+            onChange={() => {
+              dispatch({ type: "COMPLETE", payload: todo.name });
+              setNecoSeUdelalo(true);
+            }}
+            type="checkbox"
+          ></input>
+        </td>
+      ) : (
+        <td>
+          <input
+            checked={todo.tyden}
+            onChange={() => {
+              dispatch({ type: "DO_TODAY", payload: todo.name });
+            }}
+            type="checkbox"
+          ></input>
+        </td>
+      )}
+    </tr>
+  ));
 
   return (
     <div className="person">
@@ -68,7 +66,7 @@ function Person(props) {
       </h3>
       <h3 className="celkovyCas">
         {countHoursStatement(
-          // timeTotal,
+          timeCount(cinnosti),
           "Celková doba tvého úklidu: ",
           "Celkem ti zbývá: ",
           "Vše je hotovo, dobrá práce!!!",
@@ -80,22 +78,22 @@ function Person(props) {
       {week ? (
         <div>
           <h4 className="dilciCas">
-            {/* {countHoursStatement(
-              timeCount(todos?.filter((todo) => !todo.doToday)),
+            {countHoursStatement(
+              timeCount(cinnosti?.filter((todo) => !todo.doToday)),
               "Týdenní úklid: ",
               "Z týdenního úklidu zbývá: ",
               "Týdenní úklid je hotový.",
               necoSeUdelalo
-            )} */}
+            )}
           </h4>
           <h4 className="dilciCas">
-            {/* {countHoursStatement(
-              // timeCount(todos?.filter((todo) => todo.doToday)),
+            {countHoursStatement(
+              timeCount(cinnosti?.filter((todo) => todo.doToday)),
               "Jarní úklid: ",
               "Z jarního úklidu dnes zbývá: ",
               "Jarní úklid je dnes hotový.",
               necoSeUdelalo
-            )} */}
+            )}
           </h4>
         </div>
       ) : null}

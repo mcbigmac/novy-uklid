@@ -6,10 +6,10 @@ export function countHoursStatement(
   necoSeUdelalo
 ) {
   if (!necoSeUdelalo) {
-    return statementTotal + (minutes % 60) + " min";
+    return statementTotal + countHours(minutes);
   } else {
-    if (Math.floor(minutes / 60) > 0) {
-      return statementRest + (minutes % 60) + " min";
+    if (minutes > 0) {
+      return statementRest + countHours(minutes);
     } else {
       return everythingDone;
     }
@@ -17,12 +17,9 @@ export function countHoursStatement(
 }
 
 export function countHours(minutes) {
-  let hours = Math.floor(minutes / 60) + " h " + (minutes % 60) + " min";
-  return hours;
+  return Math.floor(minutes / 60) + " h " + (minutes % 60) + " min";
 }
 
 export const timeCount = (todos) => {
-  let minutes = todos?.reduce((total, current) => total + current.time, 0);
-
-  return minutes;
+  return todos?.reduce((total, current) => total + current.time, 0);
 };
