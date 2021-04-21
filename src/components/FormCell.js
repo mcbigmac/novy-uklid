@@ -1,18 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 function FormCell(props) {
-  const [background, setBackground] = useState({ backgroundColor: "white" });
   const dispatch = useDispatch();
   const people = props.people;
 
-  let completedBackground = { backgroundColor: "rgba(255,255,255,0)" };
-  if (props.todo.completed) {
-    completedBackground = { backgroundColor: "rgba(255,255,255,0.7)" };
+  function findTheme(name, themeObj) {
+    for (let key in themeObj) {
+      if (themeObj[key].name === name) {
+        return themeObj[key];
+      }
+    }
   }
 
+  const themeObj = useSelector((state) =>
+    findTheme(props.todo.who, state.theme)
+  );
+
+  const background = props.todo.completed
+    ? themeObj?.completed
+    : themeObj?.background;
+
   const inputList = people.map((person) => (
-    <td className="radioContainer" style={completedBackground} key={person}>
+    <td className="radioContainer" key={person}>
       <input
         type="radio"
         value={person}
@@ -27,26 +37,11 @@ function FormCell(props) {
       ></input>
     </td>
   ));
-  //TODO: vyresit jinak
-  useEffect(() => {
-    if (props.todo.who === "Máma") {
-      setBackground({ backgroundColor: "pink" });
-    } else if (props.todo.who === "Táta") {
-      setBackground({ backgroundColor: "lightblue" });
-    } else if (props.todo.who === "Kuba") {
-      setBackground({ backgroundColor: "lightgreen" });
-    } else if (props.todo.who === "Matěj") {
-      setBackground({ backgroundColor: "burlywood" });
-    } else {
-      setBackground({ backgroundColor: "white" });
-    }
-  }, [props.todo.who]);
 
   return (
-    <tr style={background} data-testid="formcell">
+    <tr style={{ background }} data-testid="formcell">
       <td
         className="cancel"
-        style={completedBackground}
         onClick={() => {
           dispatch({ type: "DELETE", payload: props.todo.name });
         }}
@@ -54,16 +49,10 @@ function FormCell(props) {
       >
         x
       </td>
-      <td className="todoName" style={completedBackground}>
-        {props.todo.name}
-      </td>
-      <td className="todoTime" style={completedBackground}>
-        {props.todo.time} min
-      </td>
+      <td className="todoName">{props.todo.name}</td>
+      <td className="todoTime">{props.todo.time} min</td>
       {inputList}
-      <td className="todoFinished" style={completedBackground}>
-        {props.todo.completed ? "ano" : "ne"}
-      </td>
+      <td className="todoFinished">{props.todo.completed ? "ano" : "ne"}</td>
     </tr>
   );
 }
