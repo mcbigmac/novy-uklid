@@ -23,3 +23,11 @@ export function countHours(minutes) {
 export const timeCount = (todos) => {
   return todos?.reduce((total, current) => total + current.time, 0);
 };
+
+export function findTheme(name, themeObj) {
+  for (let key in themeObj) {
+    if (themeObj[key].name === name) {
+      return themeObj[key];
+    }
+  }
+}

@@ -1,18 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { findTheme } from "../utils.js";
 
 function FormCell(props) {
   const dispatch = useDispatch();
   const people = props.people;
-
-  function findTheme(name, themeObj) {
-    for (let key in themeObj) {
-      if (themeObj[key].name === name) {
-        return themeObj[key];
-      }
-    }
-  }
-
   const themeObj = useSelector((state) =>
     findTheme(props.todo.who, state.theme)
   );

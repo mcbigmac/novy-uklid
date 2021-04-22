@@ -1,6 +1,4 @@
 import TydenNeboPololeti from "./components/TydenNeboPololeti";
-import cinnostiPololeti from "./cinnostiPololeti";
-import { useState, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -38,30 +36,27 @@ const Nadpis = styled.h1`
 `;
 
 function App() {
-  const [background, setBackground] = useState({ backgroundColor: "white" });
   const dispatch = useDispatch();
   const week = useSelector((state) => state.meta.week);
 
   return (
-    <div style={background} data-testid="background">
-      <ThemeProvider
-        theme={{
-          color: "indigo",
-          week,
-        }}
-      >
-        <Nadpis>Rodinný úklid aneb Kdo uteče, vyhraje</Nadpis>
-        <Buttons>
-          <Prepinac onClick={() => dispatch({ type: "SWITCH" })}>
-            Týdenní úklid
-          </Prepinac>
-          <PrepinacPololeti onClick={() => dispatch({ type: "SWITCH" })}>
-            Jarní úklid
-          </PrepinacPololeti>
-        </Buttons>
-        <TydenNeboPololeti />
-      </ThemeProvider>
-    </div>
+    <ThemeProvider
+      theme={{
+        color: "indigo",
+        week,
+      }}
+    >
+      <Nadpis>Rodinný úklid aneb Kdo uteče, vyhraje</Nadpis>
+      <Buttons>
+        <Prepinac onClick={() => dispatch({ type: "SWITCH" })}>
+          Týdenní úklid
+        </Prepinac>
+        <PrepinacPololeti onClick={() => dispatch({ type: "SWITCH" })}>
+          Jarní úklid
+        </PrepinacPololeti>
+      </Buttons>
+      <TydenNeboPololeti />
+    </ThemeProvider>
   );
 }
 

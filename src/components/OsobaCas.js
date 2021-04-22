@@ -1,12 +1,9 @@
 import React from "react";
+import { countHours } from "../utils";
 
 function OsobaCas(props) {
-
-  function countHours(minutes) {
-    return Math.floor(minutes / 60) + " h " + (minutes % 60) + " min";
-  }
-
   let countMins = Math.round((props.countTime / 100) * props.person.percent);
+
   let hours = countHours(countMins);
 
   return (

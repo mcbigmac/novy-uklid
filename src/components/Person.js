@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { timeCount, countHoursStatement } from "../utils";
+import { timeCount, countHoursStatement, findTheme } from "../utils";
 
 function Person(props) {
   const [necoSeUdelalo, setNecoSeUdelalo] = useState(false);
@@ -21,14 +21,6 @@ function Person(props) {
 
   const theme = useSelector((state) => state.theme);
   const dispatch = useDispatch();
-
-  function findTheme(name, themeObj) {
-    for (let key in themeObj) {
-      if (themeObj[key].name === name) {
-        return themeObj[key];
-      }
-    }
-  }
 
   const activityList = cinnosti.map((todo) => (
     <tr key={todo.name}>
