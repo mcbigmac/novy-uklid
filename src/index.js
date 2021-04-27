@@ -3,16 +3,17 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import week from "./reducers/weekReducer";
 import season from "./reducers/seasonReducer";
 import meta from "./reducers/metaReducer";
 import theme from "./reducers/themeReducer";
+import thunk from "redux-thunk";
 
 const reducer = combineReducers({ week, season, meta, theme });
 
-export const store = createStore(reducer);
+export const store = createStore(reducer, applyMiddleware(thunk));
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,9 +1,43 @@
-import cinnosti from "../cinnostiTyden";
+export const getWeek = () => (dispatch) => {
+  fetch(`http://localhost:3001/tyden`)
+    .then((response) => response.json())
+    .then((data) => {
+      dispatch({ type: "GET_WEEK", payload: data });
+    })
+    .catch((error) => console.log(error));
+};
 
-const reducer = (state = cinnosti, action) => {
+export const getCurrentWeek = () => (dispatch) => {
+  fetch(`http://localhost:3001/aktualni`)
+    .then((response) => response.json())
+    .then((data) => {
+      dispatch({ type: "GET_WEEK", payload: data });
+    })
+    .catch((error) => console.log(error));
+};
+
+export const saveWeekOrSeason = () => (dispatch, getState) => {
+  fetch(`http://localhost:3001/aktualni`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(getState().week),
+  })
+    .then((response) => response.json)
+    .catch((error) => console.log(error));
+
+  fetch(`http://localhost:3001/pololetiAktualni`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(getState().season),
+  })
+    .then((response) => response.json)
+    .catch((error) => console.log(error));
+};
+
+const reducer = (state = [], action) => {
   switch (action.type) {
-    case "GET_STATE":
-      return state;
+    case "GET_WEEK":
+      return action.payload;
     case "DELETE":
       return state.filter((todo) => todo.name !== action.payload);
     case "COMPLETE":

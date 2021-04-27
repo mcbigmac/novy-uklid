@@ -1,7 +1,9 @@
-const reducer = (state = { week: true }, action) => {
+const reducer = (state = { week: true, necoSeUdelalo: false }, action) => {
   switch (action.type) {
     case "SWITCH":
-      return { ...state, week: !state.week };
+      return { ...state, week: action.payload };
+    case "DONE":
+      return { ...state, necoSeUdelalo: action.payload };
     default:
       return state;
   }

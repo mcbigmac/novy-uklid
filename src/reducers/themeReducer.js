@@ -23,6 +23,12 @@ const theme = {
     background: "burlywood",
     completed: "rgba(202, 181, 67, 0.19)",
   },
+  nikdo: {
+    name: "zatím nikdo",
+    color: "black",
+    background: "white",
+    completed: "white",
+  },
 };
 
 const reducer = (state = theme, action) => {

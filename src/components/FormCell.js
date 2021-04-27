@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { findTheme } from "../utils.js";
+import { saveWeekOrSeason } from "../reducers/weekReducer";
 
 function FormCell(props) {
   const dispatch = useDispatch();
@@ -8,6 +9,8 @@ function FormCell(props) {
   const themeObj = useSelector((state) =>
     findTheme(props.todo.who, state.theme)
   );
+
+  const week = useSelector((state) => state.meta.week);
 
   const background = props.todo.completed
     ? themeObj?.completed
@@ -24,6 +27,7 @@ function FormCell(props) {
             type: "ASSIGN",
             payload: { taskName: props.todo.name, who: person },
           });
+          dispatch(saveWeekOrSeason());
         }}
         disabled={props.todo.completed}
       ></input>
@@ -32,15 +36,18 @@ function FormCell(props) {
 
   return (
     <tr style={{ background }} data-testid="formcell">
-      <td
-        className="cancel"
-        onClick={() => {
-          dispatch({ type: "DELETE", payload: props.todo.name });
-        }}
-        data-testid="delete"
-      >
-        x
-      </td>
+      {week ? (
+        <td
+          className="cancel"
+          onClick={() => {
+            dispatch({ type: "DELETE", payload: props.todo.name });
+            dispatch(saveWeekOrSeason());
+          }}
+          data-testid="delete"
+        >
+          x
+        </td>
+      ) : null}
       <td className="todoName">{props.todo.name}</td>
       <td className="todoTime">{props.todo.time} min</td>
       {inputList}

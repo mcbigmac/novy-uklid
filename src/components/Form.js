@@ -3,7 +3,7 @@ import FormCell from "./FormCell";
 import { useSelector } from "react-redux";
 
 function Form() {
-  const people = ["Máma", "Táta", "Kuba", "Matěj"];
+  const people = ["Máma", "Táta", "Kuba", "Matěj", "zatím nikdo"];
   const week = useSelector((state) => state.meta.week);
   const todos = useSelector((state) => (week ? state.week : state.season));
 
@@ -22,14 +22,14 @@ function Form() {
       <table>
         <thead>
           <tr>
-            <th className="cancel" rowSpan="2"></th>
+            {week ? <th className="cancel" rowSpan="2"></th> : null}
             <th className="todoName" rowSpan="2">
               Činnost
             </th>
             <th className="todoTime" rowSpan="2">
               Čas
             </th>
-            <th className="todoWho" colSpan="4">
+            <th className="todoWho" colSpan="5">
               Kdo to udělá
             </th>
             <th className="todoFinished" rowSpan="2">

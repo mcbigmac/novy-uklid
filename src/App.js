@@ -1,6 +1,9 @@
 import TydenNeboPololeti from "./components/TydenNeboPololeti";
 import styled, { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import { getWeek, getCurrentWeek } from "./reducers/weekReducer";
+import { useEffect } from "react";
+import { getCurrentSeason, getSeason } from "./reducers/seasonReducer";
 
 const Buttons = styled.div`
   display: flex;
@@ -8,6 +11,7 @@ const Buttons = styled.div`
   align-items: center;
   justify-content: left;
   margin: 50px;
+  margin-bottom: 0;
 `;
 
 const Prepinac = styled.button`
@@ -27,6 +31,18 @@ const PrepinacPololeti = styled(Prepinac)`
   background: ${(props) => (props.theme.week ? "white" : "rgb(126, 197, 194)")};
 `;
 
+const NovyTyden = styled(Prepinac)`
+  background: lightskyblue;
+  margin: 0;
+  margin-left: 70px;
+`;
+
+const NovePololeti = styled(Prepinac)`
+  background: oldlace;
+  margin: 0;
+  margin-left: 70px;
+`;
+
 const Nadpis = styled.h1`
   color: ${(props) => props.theme.color};
   margin: 50px;
@@ -39,6 +55,16 @@ function App() {
   const dispatch = useDispatch();
   const week = useSelector((state) => state.meta.week);
 
+  useEffect(() => {
+    dispatch(getCurrentWeek());
+    dispatch(getCurrentSeason());
+  }, []);
+
+  const handleClick = (bool) => {
+    dispatch({ type: "SWITCH", payload: bool });
+    dispatch(bool ? getCurrentWeek() : getCurrentSeason());
+  };
+
   return (
     <ThemeProvider
       theme={{
@@ -48,13 +74,31 @@ function App() {
     >
       <Nadpis>Rodinný úklid aneb Kdo uteče, vyhraje</Nadpis>
       <Buttons>
-        <Prepinac onClick={() => dispatch({ type: "SWITCH" })}>
-          Týdenní úklid
-        </Prepinac>
-        <PrepinacPololeti onClick={() => dispatch({ type: "SWITCH" })}>
+        <Prepinac onClick={() => handleClick(true)}>Týdenní úklid</Prepinac>
+        <PrepinacPololeti onClick={() => handleClick(false)}>
           Jarní úklid
         </PrepinacPololeti>
       </Buttons>
+      {week ? (
+        <NovyTyden
+          onClick={() => {
+            dispatch(getWeek());
+            dispatch({ type: "DONE", payload: false });
+          }}
+        >
+          Nový týden
+        </NovyTyden>
+      ) : null}
+
+      {/* <NovePololeti
+          onClick={() => {
+            dispatch(getSeason());
+          }}
+        >
+          Nový jarní úklid
+        </NovePololeti>
+      )} */}
+
       <TydenNeboPololeti />
     </ThemeProvider>
   );

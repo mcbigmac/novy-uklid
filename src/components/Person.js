@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { timeCount, countHoursStatement, findTheme } from "../utils";
+import { saveWeekOrSeason } from "../reducers/weekReducer";
 
 function Person(props) {
-  const [necoSeUdelalo, setNecoSeUdelalo] = useState(false);
+  const necoSeUdelalo = useSelector((state) => state.meta.necoSeUdelalo);
 
   const seasonTodoToday = useSelector((state) =>
-    state.season.filter((todo) => todo.tyden)
+    state.season.filter((todo) => todo.doToday)
   );
 
   const week = useSelector((state) => state.meta.week);
@@ -32,7 +33,8 @@ function Person(props) {
             checked={todo.completed}
             onChange={() => {
               dispatch({ type: "COMPLETE", payload: todo.name });
-              setNecoSeUdelalo(true);
+              dispatch({ type: "DONE", payload: true });
+              dispatch(saveWeekOrSeason());
             }}
             type="checkbox"
           ></input>
@@ -43,6 +45,7 @@ function Person(props) {
             checked={todo.tyden}
             onChange={() => {
               dispatch({ type: "DO_TODAY", payload: todo.name });
+              dispatch(saveWeekOrSeason());
             }}
             type="checkbox"
           ></input>
