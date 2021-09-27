@@ -76,10 +76,10 @@ function App() {
       <Buttons>
         <Prepinac onClick={() => handleClick(true)}>Týdenní úklid</Prepinac>
         <PrepinacPololeti onClick={() => handleClick(false)}>
-          Jarní úklid
+          Podzimní úklid
         </PrepinacPololeti>
       </Buttons>
-      {week ? (
+      {week && (
         <NovyTyden
           onClick={() => {
             dispatch(getWeek());
@@ -88,16 +88,14 @@ function App() {
         >
           Nový týden
         </NovyTyden>
-      ) : null}
-
+      )}
       {/* <NovePololeti
-          onClick={() => {
-            dispatch(getSeason());
-          }}
-        >
-          Nový jarní úklid
-        </NovePololeti>
-      )} */}
+        onClick={() => {
+          dispatch(getSeason());
+        }}
+      >
+        Nový jarní úklid
+      </NovePololeti> */}
 
       <TydenNeboPololeti />
     </ThemeProvider>
