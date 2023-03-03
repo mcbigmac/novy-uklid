@@ -1,5 +1,11 @@
+var uklidServer = process.env.REACT_APP_UKLID_SERVER
+if (!uklidServer) {
+  uklidServer = 'http://localhost:3001'
+}
+console.log(uklidServer);
+
 export const getSeason = () => (dispatch) => {
-  fetch(`http://localhost:3001/pololeti`)
+  fetch(`${uklidServer}/pololeti`)
     .then((response) => response.json())
     .then((data) => {
       dispatch({ type: "GET_SEASON", payload: data });
@@ -8,7 +14,7 @@ export const getSeason = () => (dispatch) => {
 };
 
 export const getCurrentSeason = () => (dispatch) => {
-  fetch(`http://localhost:3001/pololetiAktualni`)
+  fetch(`${uklidServer}/pololetiAktualni`)
     .then((response) => response.json())
     .then((data) => {
       dispatch({ type: "GET_SEASON", payload: data });
@@ -17,7 +23,7 @@ export const getCurrentSeason = () => (dispatch) => {
 };
 
 export const saveSeason = () => (dispatch, getState) => {
-  fetch(`http://localhost:3001/pololetiAktualni`, {
+  fetch(`${uklidServer}/pololetiAktualni`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(getState().season),

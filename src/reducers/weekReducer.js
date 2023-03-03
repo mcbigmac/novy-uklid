@@ -1,5 +1,10 @@
+var uklidServer = process.env.REACT_APP_UKLID_SERVER
+if (!uklidServer) {
+  uklidServer = 'http://localhost:3001'
+}
+
 export const getWeek = () => (dispatch) => {
-  fetch(`http://localhost:3001/tyden`)
+  fetch(`${uklidServer}/tyden`)
     .then((response) => response.json())
     .then((data) => {
       dispatch({ type: "GET_WEEK", payload: data });
@@ -8,7 +13,7 @@ export const getWeek = () => (dispatch) => {
 };
 
 export const getCurrentWeek = () => (dispatch) => {
-  fetch(`http://localhost:3001/aktualni`)
+  fetch(`${uklidServer}/aktualni`)
     .then((response) => response.json())
     .then((data) => {
       dispatch({ type: "GET_WEEK", payload: data });
@@ -17,7 +22,7 @@ export const getCurrentWeek = () => (dispatch) => {
 };
 
 export const saveWeekOrSeason = () => (dispatch, getState) => {
-  fetch(`http://localhost:3001/aktualni`, {
+  fetch(`${uklidServer}/aktualni`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(getState().week),
@@ -25,7 +30,7 @@ export const saveWeekOrSeason = () => (dispatch, getState) => {
     .then((response) => response.json)
     .catch((error) => console.log(error));
 
-  fetch(`http://localhost:3001/pololetiAktualni`, {
+  fetch(`${uklidServer}/pololetiAktualni`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(getState().season),
