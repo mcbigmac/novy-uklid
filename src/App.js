@@ -58,7 +58,7 @@ function App() {
   useEffect(() => {
     dispatch(getCurrentWeek());
     dispatch(getCurrentSeason());
-  }, []);
+  });
 
   const handleClick = (bool) => {
     dispatch({ type: "SWITCH", payload: bool });

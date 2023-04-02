@@ -22,6 +22,7 @@ function FormCell(props) {
         type="radio"
         value={person}
         name={props.todo.name}
+        checked={'who' in props.todo && props.todo.who ? props.todo.who === person : person === 'zatím nikdo'}
         onChange={() => {
           dispatch({
             type: "ASSIGN",
